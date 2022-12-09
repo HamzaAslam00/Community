@@ -10,12 +10,12 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/css/theme/dashlite.css',
-                'resources/css/theme/theme.css',
+                // 'resources/css/theme/dashlite.css',
+                // 'resources/css/theme/theme.css',
                 
                 'resources/js/app.js',
-                'resources/js/theme/bundle.js',
-                'resources/js/theme/scripts.js',
+                // 'resources/js/theme/bundle.js',
+                // 'resources/js/theme/scripts.js',
             ],
             refresh: true,
         }),

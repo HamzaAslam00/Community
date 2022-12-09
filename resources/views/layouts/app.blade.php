@@ -13,18 +13,21 @@
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     
-    <!-- StyleSheets  -->
+    <!-- Scripts  -->
     @vite([
         'resources/css/app.css',
-        'resources/css/theme/dashlite.css',
-        'resources/css/theme/theme.css',
         'resources/js/app.js',
-        'resources/js/theme/bundle.js',
-        'resources/js/theme/scripts.js',
     ])
+    
+    <link rel="stylesheet" href="{{ asset('assets/css/dashlite.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}" />
 
     <!-- page styles -->
     @yield('styles')
+
+    <script src="{{ asset('assets/js/bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/common.js') }}"></script>
 </head>
 
 <body class="nk-body bg-lighter npc-default has-sidebar ">

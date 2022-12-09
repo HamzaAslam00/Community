@@ -20,8 +20,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('user_type');
+            $table->string('phone')->nullable();
+            $table->text('address')->nullable();
+            $table->string('user_type')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

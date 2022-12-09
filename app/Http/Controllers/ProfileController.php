@@ -2,70 +2,164 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function index()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = \Auth::user();
+        return view('profile.edit', compact('user'));
     }
 
     /**
-     * Update the user's profile information.
+     * Show the form for creating a new resource.
      *
-     * @param  \App\Http\Requests\ProfileUpdateRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function update(ProfileUpdateRequest $request)
+    public function create()
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        //
     }
 
     /**
-     * Delete the user's account.
+     * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function store(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|regex:/^[A-Za-z ]+$/',
+            'last_name' => 'required|regex:/^[A-Za-z ]+$/',
         ]);
-
-        $user = $request->user();
-
-        if($user->getRoleNames()[0] == 'admin'){
-            abort(401, 'Super admin cannot be deleted');
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
+        
+        try{
+            DB::beginTransaction();
+            $user = User::findOrFail($id);
+            $user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'phone' => $request->phone,
+                'address' => $request->address,
+            ]);
+            if($request->has('avatar')){
+                $path = saveResizeImage($request->avatar, 'user/avatar', 1024, 'jpg');
+                $user->update([
+                    'avatar' => $path
+                ]);
+            }
 
-        Auth::logout();
+            DB::commit();
+            return response()->json([
+                'success' => JsonResponse::HTTP_OK,
+                'message' => 'Profile updated successfully.',
+            ], JsonResponse::HTTP_OK);
 
-        $user->delete();
+        } catch(Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 
-        return Redirect::to('/');
+    public function savePassword(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        try{
+            DB::beginTransaction();
+            $user = User::findOrFail($id);
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+            DB::commit();
+            return response()->json([
+                'success' => JsonResponse::HTTP_OK,
+                'message' => 'Password updated successfully.',
+            ], JsonResponse::HTTP_OK);
+
+        } catch(Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

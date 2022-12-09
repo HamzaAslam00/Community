@@ -12,13 +12,11 @@
             </div><!-- .nk-header-brand -->
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
-                    <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm d-none d-md-inline-flex"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
-
                     <li class="dropdown user-dropdown" style="display: inherit!important">
                         <a class="dropdown-toggle mr-n1" data-toggle="dropdown">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
-                                    <img src="{{ getImage(null, true) }}" alt="profile image" class="" style="max-width:50px; height:50px"/>
+                                    <img src="@isset (Auth::user()->avatar){{getImage(Auth::user()->avatar)}} @else {{asset('assets/images/no_avatar.png')}} @endif" alt="profile image" class="" style="max-width:50px; height:50px"/>
                                 </div>
                                 <div class="user-info d-none d-xl-block">
                                     {{-- <div class="user-status user-status-unverified">Unverified</div> --}}
@@ -30,7 +28,7 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <img src="{{ getImage(null, true) }}" alt="profile image" class="" style="height:inherit"/>
+                                        <img src="@isset (Auth::user()->avatar){{getImage(Auth::user()->avatar)}} @else {{asset('assets/images/no_avatar.png')}} @endif" alt="profile image" class="" style="height:inherit"/>
                                     </div>
                                     <div class="user-info">
                                         <span class="lead-text">{{ getFullName(Auth::user()) }}</span>
