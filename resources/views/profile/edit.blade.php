@@ -29,7 +29,7 @@
                                     <h5 class="title">Profile Settings</h5>
                                     {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                 </div>
-                                <form action="{{route('profile.update', $user->id)}}" class="gy-3 form-settings form-validate is-alter" method="POST" data-form="ajax-form" data-modal="#ajax_model" enctype="multipart/form-data">
+                                <form action="{{route('profile.update', $user->id)}}" class="gy-3 form-settings form-validate is-alter" method="POST" data-form="ajax-form" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="row g-3 align-center">
@@ -115,7 +115,7 @@
                                     <div class="row g-3">
                                         <div class="col-lg-8 offset-lg-4">
                                             <div class="form-group mt-2">
-                                                <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                <button type="submit" class="btn btn-lg btn-primary" data-button="submit">Update</button>
                                             </div>
                                         </div>
                                     </div>

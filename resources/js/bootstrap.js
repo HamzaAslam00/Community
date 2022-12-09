@@ -12,8 +12,8 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-import sweetalert2 from 'sweetalert2';
-window.swal = sweetalert2;
+import Sweetalert2 from 'sweetalert2';
+window.swal = Sweetalert2;
 window.toast = swal.mixin({
     toast: true,
     position: 'bottom-end',
