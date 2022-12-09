@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RegistrationPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,10 @@ Route::middleware('auth')->group(function () {
     //profile routes
     Route::resource('profile', ProfileController::class);
     Route::put('profile/passwordsave/{profile}', [ProfileController::class,'savePassword'])->name('profile.save_password');
+
+    //groups routes
+    Route::resource('groups', GroupController::class);
+    Route::get('groups-dt', [GroupController::class, 'dataTable'])->name('groups-datatable');
 
     //registration-pages routes
     Route::resource('registration-pages', RegistrationPageController::class);

@@ -19,13 +19,12 @@
         'resources/js/app.js',
     ])
     
-    <link rel="stylesheet" href="{{ asset('assets/css/dashlite.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/dashlite.css') }}?v={{ time() }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}?v={{ time() }}" />
 
     
-    <script src="{{ asset('assets/js/bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts.js') }}"></script>
-    <script src="{{ asset('assets/js/common.js') }}"></script>
+    <script src="{{ asset('assets/js/bundle.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}?v={{ time() }}"></script>
 
     <!-- page styles -->
     @yield('styles')
@@ -74,6 +73,7 @@
             }
         });
     </script>
+    <script src="{{ asset('assets/js/common.js') }}?v={{ time() }}"></script>
     <!-- page scripts -->
     @stack('scripts')
 </body>

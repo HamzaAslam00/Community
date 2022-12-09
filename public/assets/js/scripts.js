@@ -526,12 +526,8 @@
   }; // DataTable Init @v1.0
 
 
-  NioApp.DataTable.init = function () {
-    NioApp.DataTable('.datatable-init', {
-      responsive: {
-        details: true
-      }
-    });
+  NioApp.DataTable.init = function (options) {
+    NioApp.DataTable('.datatable-init', options);
     NioApp.DataTable('.datatable-init-export', {
       responsive: {
         details: true
@@ -887,7 +883,6 @@
     NioApp.Select2.init();
     NioApp.Dropzone.init();
     NioApp.Slider.init();
-    NioApp.DataTable.init();
   }; // Toggler @v1
 
 

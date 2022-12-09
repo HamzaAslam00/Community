@@ -9,9 +9,9 @@
     if ($(_basic).exists()) {
       $(_basic).each(function () {
         $(this).summernote({
-          placeholder: 'Hello stand alone ui',
+          placeholder: 'Description content',
           tabsize: 2,
-          height: 120,
+          height: 300,
           toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'strikethrough', 'clear']], ['font', ['superscript', 'subscript']], ['color', ['color']], ['fontsize', ['fontsize', 'height']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'codeview', 'help']]]
         });
       });
@@ -22,7 +22,8 @@
     if ($(_minimal).exists()) {
       $(_minimal).each(function () {
         $(this).summernote({
-          placeholder: 'Hello stand alone ui',
+          placeholder: 'Description content',
+          name: 'description',
           tabsize: 2,
           height: 120,
           toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['view', ['fullscreen']]]
