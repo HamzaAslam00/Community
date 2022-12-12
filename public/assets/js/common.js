@@ -119,6 +119,7 @@ $('body').on('click', '[data-act=ajax-modal]', function () {
 
 $('body').on('submit', '[data-form=ajax-form]', function(e) {
     e.preventDefault();
+    // alert('submited');
     const form = this;
     const confirm = $(form).data('confirm');
 

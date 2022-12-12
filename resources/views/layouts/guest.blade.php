@@ -10,17 +10,21 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Fav Icon  -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/frontend/favicon.png') }}" type="image/png">
+        <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+        
+        <!-- Scripts  -->
+        @vite([
+            'resources/css/app.css',
+            'resources/js/app.js',
+        ])
+        
+        <link rel="stylesheet" href="{{ asset('assets/css/dashlite.css') }}?v={{ time() }}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}?v={{ time() }}" />
 
-            <!-- Scripts -->
-            @vite([
-                'resources/css/app.css',
-                'resources/css/theme/dashlite.css',
-                'resources/css/theme/theme.css',
-                'resources/js/app.js',
-                'resources/js/theme/bundle.js',
-                'resources/js/theme/scripts.js',
-            ])
+        
+        <script src="{{ asset('assets/js/bundle.js') }}?v={{ time() }}"></script>
+        <script src="{{ asset('assets/js/scripts.js') }}?v={{ time() }}"></script>
+
     </head>
     <body class="nk-body bg-lighter npc-default pg-auth">
         <div class="nk-app-root">
@@ -46,5 +50,6 @@
                 }
             });
         </script>
+        <script src="{{ asset('assets/js/common.js') }}?v={{ time() }}"></script>
     </body>
 </html>

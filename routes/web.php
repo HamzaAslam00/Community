@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
 
     //user routes
     Route::resource('users', UserController::class);
+
+    //user routes
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__.'/auth.php';
