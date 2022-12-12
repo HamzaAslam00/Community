@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ route('request-admin') }}" data-form="ajax-form" data-modal="#ajax_model">
+            <form action="{{ route('request-admin') }}" class="gy-3 form-settings form-validate is-alter" method="POST" data-form="ajax-form">
                 @csrf
                 <div class="form-group">
                     <div class="form-label-group">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-lg btn-primary btn-block">Send</button>
+                    <button class="btn btn-lg btn-primary btn-block" data-spinner="true" data-button="submit">Send</button>
                 </div>
             </form>
             <div class="form-note-s2 text-center pt-4"> Already have an account? <a
