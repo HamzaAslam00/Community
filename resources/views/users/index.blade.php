@@ -12,7 +12,7 @@
                         <p>You have total {{ $userCount }} Users.</p>
                     </div>
                 </div>
-                <div class="nk-block-head-content">
+                {{-- <div class="nk-block-head-content">
                     <div class="toggle-wrap nk-block-tools-toggle">
                         <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                         <div class="toggle-expand-content" data-content="pageMenu">
@@ -21,7 +21,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="card card-preview">
