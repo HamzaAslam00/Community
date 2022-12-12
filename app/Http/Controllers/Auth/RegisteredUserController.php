@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use App\Mail\RequestAdminMail;
+use Illuminate\Validation\Rules;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -50,5 +54,35 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function requestAdmin(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        try{
+            $adminEmail = User::role('admin')->first()->email;
+            $user = [
+                'email' => $request->email,
+            ];
+            Mail::to($adminEmail)->send(new RequestAdminMail($user));
+            return response()->json([
+                'success' => JsonResponse::HTTP_OK,
+                'message' => 'Email sent successfully.',
+            ], JsonResponse::HTTP_OK);
+
+        } catch(Exception $e){
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

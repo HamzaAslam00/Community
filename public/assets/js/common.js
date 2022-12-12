@@ -119,6 +119,7 @@ $('body').on('click', '[data-act=ajax-modal]', function () {
 
 $('body').on('submit', '[data-form=ajax-form]', function(e) {
     e.preventDefault();
+    // alert('submited');
     const form = this;
     const confirm = $(form).data('confirm');
 
@@ -149,9 +150,14 @@ function sendAjaxForm(form) {
     const html_div_id = _self.data('html-div-id');
     const show_div = _self.data('show-div');
     const hide_div = _self.data('hide-div');
+    const remove_spinner = btn.data('spinner');
 
     btn.attr('disabled', 'disabled');
-    btn.html(btnHtml + '&nbsp;&nbsp;<span class="spinner-border spinner-border-sm"></span>');
+    if(!remove_spinner) {
+        btn.html(btnHtml + '&nbsp;&nbsp;<span class="spinner-border spinner-border-sm"></span>');
+    } else {
+        btn.html(btnHtml + 'ing ...');
+    }
 
     axios({
         url: _self.attr('action'),
