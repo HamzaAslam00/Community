@@ -34,7 +34,7 @@
                         @endforeach
                     </select>
                 </div> --}}
-                <select class="form-control form-select" id="default_groups" name="default_groups[]" multiple>
+                <select class="form-control form-select form-select-modal" id="default_groups" name="default_groups[]" multiple>
                     @foreach ($groups as $group)
                         <option value="{{ $group->id }}" @if($isEdit && in_array($group->id, $selected_groups)) selected @endif>{{ $group->name }}</option>
                     @endforeach
@@ -57,3 +57,7 @@
         </div>
     </div>
 </form>
+
+<script>
+    $('.form-select-modal').select2();
+</script>

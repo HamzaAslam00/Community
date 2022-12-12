@@ -42,12 +42,13 @@ Route::middleware('auth')->group(function () {
     //registration-pages routes
     Route::resource('registration-pages', RegistrationPageController::class);
     Route::get('registration-pages-dt', [RegistrationPageController::class, 'dataTable'])->name('registration-pages-datatable');
-
+    
     //user routes
     Route::resource('users', UserController::class);
+    Route::get('users-dt', [UserController::class, 'dataTable'])->name('users-datatable');
 
     //user routes
-    Route::resource('users', UserController::class);
+    // Route::resource('users', UserController::class);
 });
 
 require __DIR__.'/auth.php';
