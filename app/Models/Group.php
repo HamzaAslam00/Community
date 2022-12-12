@@ -14,4 +14,9 @@ class Group extends Model
         'description',
         'status',
     ];
+
+    public function registrationPages()
+    {
+        return $this->belongsToMany(RegistrationPage::class, 'group_registration_page');
+    }
 }

@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('registration_pages', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('slug');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

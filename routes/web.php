@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     //registration-pages routes
     Route::resource('registration-pages', RegistrationPageController::class);
+    Route::get('registration-pages-dt', [RegistrationPageController::class, 'dataTable'])->name('registration-pages-datatable');
 
     //user routes
     Route::resource('users', UserController::class);
