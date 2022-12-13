@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('registration_pages', function (Blueprint $table) {
+        Schema::create('activation_urls', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('slug');
+            $table->unsignedBigInteger('registration_page_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('url');
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->unique('slug');
+            $table->foreign('registration_page_id')->references('id')->on('registration_pages')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registration_pages');
+        Schema::dropIfExists('activation_urls');
     }
 };

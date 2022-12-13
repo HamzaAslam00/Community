@@ -18,8 +18,24 @@
                     </div>
                 </div>
             </div>
-            <form action="{{ route('request-admin') }}" class="gy-3 form-settings form-validate is-alter" method="POST" data-form="ajax-form">
+            <form action="{{ route('register') }}" class="gy-3 form-settings form-validate is-alter" method="POST" data-form="ajax-form">
                 @csrf
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <label class="form-label" for="first_name">First Name</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" placeholder="Enter your first name address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <label class="form-label" for="last_name">Last Name</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" placeholder="Enter your last name address">
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="form-label-group">
                         <label class="form-label" for="email">Email</label>

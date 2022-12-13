@@ -17,8 +17,8 @@
             <div class="form-group">
                 <div class=" logo">
                     <label for="logo-input">
-                    <img id="logo" src="{{ $isEdit && isset($user->avatar) ? getImage($user->avatar) : asset('assets/images/no_avatar.png') }}" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
-                    <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file' onchange="readURL(this);" />
+                        <img id="logo" src="{{ $isEdit && isset($user->avatar) ? getImage($user->avatar) : asset('assets/images/no_avatar.png') }}" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                        <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file' onchange="readURL(this);" />
                     </label>
                 </div>
             </div>

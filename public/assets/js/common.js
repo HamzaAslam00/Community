@@ -170,7 +170,7 @@ function sendAjaxForm(form) {
             if (dt !== '') $(dt).DataTable().ajax.reload();
             toastMessage(response.data.message, 'success');
             if (redirect) {
-                window.location.href = redirect;
+                window.location.href = response.data.redirect ? response.data.redirect : redirect;
             }
             if (response.data.view) {
                 $(html_div_id).html(response.data.view);

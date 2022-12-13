@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Group;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
-class GroupController extends Controller
+class TicketController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,8 +19,8 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups_count = Group::get()->count();
-        return view('groups.index', compact('groups_count'));
+        $ticketsCount = Ticket::get()->count();
+        return view('tickets.index', compact('ticketsCount'));
     }
 
     /**
@@ -30,7 +30,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        return view('groups.modal');
+        return view('tickets.modal');
     }
 
     /**
@@ -42,8 +42,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:groups,name',
-            'description' => 'required',
+            'amount' => 'required|unique:tickets,amount',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -54,15 +53,14 @@ class GroupController extends Controller
         
         try{
             DB::beginTransaction();
-            $group = Group::create([
-                'name' => $request->name,
-                'description' => $request->description,
+            $ticket = Ticket::create([
+                'amount' => $request->amount,
                 'status' => $request->status,
             ]);
             DB::commit();
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
-                'message' => 'Group added successfully.',
+                'message' => 'Ticket added successfully.',
             ], JsonResponse::HTTP_OK);
 
         } catch(Exception $e){
@@ -77,10 +75,10 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Group  $group
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group)
+    public function show(Ticket $ticket)
     {
         //
     }
@@ -88,26 +86,25 @@ class GroupController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Group  $group
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function edit(Group $group)
+    public function edit(Ticket $ticket)
     {
-        return view('groups.modal', compact('group'));
+        return view('tickets.modal', compact('ticket'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Group  $group
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Group $group)
+    public function update(Request $request, Ticket $ticket)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:groups,name,'.$group->id.',id',
-            'description' => 'required',
+            'amount' => 'required|unique:tickets,amount,'.$ticket->id.',id',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -118,15 +115,14 @@ class GroupController extends Controller
         
         try{
             DB::beginTransaction();
-            $group->update([
-                'name' => $request->name,
-                'description' => $request->description,
+            $ticket->update([
+                'amount' => $request->amount,
                 'status' => $request->status,
             ]);
             DB::commit();
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
-                'message' => 'Group updated successfully.',
+                'message' => 'Ticket updated successfully.',
             ], JsonResponse::HTTP_OK);
 
         } catch(Exception $e){
@@ -141,17 +137,17 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Group  $group
+     * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Group $group)
+    public function destroy(Ticket $ticket)
     {
         try 
         {
-            $group->delete();
+            $ticket->delete();
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
-                'message' => 'Group Deleted successfully'
+                'message' => 'Ticket Deleted successfully'
             ], JsonResponse::HTTP_OK);
         } 
         catch (\Exception $exception) 
@@ -163,8 +159,8 @@ class GroupController extends Controller
     }
     
     public function dataTable () {
-        $groups = Group::orderBy('id', 'DESC')->get();
-        return Datatables::of($groups)
+        $tickets = Ticket::orderBy('id', 'DESC')->get();
+        return Datatables::of($tickets)
             ->addColumn('actions', function ($record) {
                 $actions = '';
                     $actions =  '<div class="drodown">
@@ -172,30 +168,27 @@ class GroupController extends Controller
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('groups.edit', $record). '" data-title="Edit Group" data-toggle="tooltip" data-placement="top" title="Edit Group">
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('tickets.edit', $record). '" data-title="Edit Ticket" data-toggle="tooltip" data-placement="top" title="Edit Ticket">
                                             <em class="icon ni ni-edit"></em><span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="groups_table" data-method="get" data-url="' .route('groups.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Group">
+                                        <a class="delete" href="javascript:void(0)" data-table="tickets_table" data-method="get" data-url="' .route('tickets.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Ticket">
                                             <em class="icon ni ni-trash"></em><span>Delete</span>
                                         </a>
                                     </li>
                                 </ul></div></div>';
                 return $actions;
             })
-            ->addColumn('name', function ($record) {
+            ->addColumn('amount', function ($record) {
                 return '<a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('groups.edit', $record). '" data-title="Edit Group"
-                                data-toggle="tooltip" data-placement="top" title="Edit Group">'.$record->name.'</a>';
-            })
-            ->addColumn('description', function ($record) {
-                return addEllipsis($record->description);
+                                data-action-url="'. route('tickets.edit', $record). '" data-title="Edit Ticket"
+                                data-toggle="tooltip" data-placement="top" title="Edit Ticket">'.$record->amount.'$</a>';
             })
             ->addColumn('status', function ($record) {
                 return '<span class="badge badge-'.statusClasses($record->status).'">'. ucfirst($record->status) .'</span>';
             })
-            ->rawColumns(['name', 'description', 'status', 'actions'])
+            ->rawColumns(['amount', 'status', 'actions'])
             ->addIndexColumn()->make(true);
     }
 }

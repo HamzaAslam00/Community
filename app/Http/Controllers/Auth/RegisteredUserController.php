@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\RequestAdminMail;
+use App\Models\ActivationUrl;
 use Illuminate\Validation\Rules;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -24,6 +25,21 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
+        $slug = request()->route('slug');
+        $activationUrl = '';
+        if ($slug) {
+            $activationUrl = ActivationUrl::with('tickets', 'registrationPage')->where('url', route('register', $slug))->first();
+            if(!$activationUrl) {abort(404);}
+            if($activationUrl->status == 'inactive'){abort(403);}
+            if ($activationUrl->tickets) {
+                return view('payments.payment_form', compact('activationUrl'));
+            } else {
+                $activationUrl->user->update([
+                    'status' => 'active',
+                ]);
+                return view('auth.login');
+            }
+        }
         return view('auth.register');
     }
 
@@ -37,28 +53,10 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
-    }
-
-    public function requestAdmin(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -66,16 +64,26 @@ class RegisteredUserController extends Controller
                 'message' => $validator->errors()->first(),
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
-        
+
         try{
-            $adminEmail = User::role('admin')->first()->email;
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make(12345678),
+                'user_type' => 'user',
+                'status' => 'inactive',
+            ]);
+            $user->assignRole('user');
             $user = [
+                'name' => getFullName($user),
                 'email' => $request->email,
             ];
+            $adminEmail = User::role('admin')->first()->email;
             Mail::to($adminEmail)->send(new RequestAdminMail($user));
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
-                'message' => 'Email sent successfully.',
+                'message' => 'Email sent! Admin will back to you soon',
             ], JsonResponse::HTTP_OK);
 
         } catch(Exception $e){
@@ -84,5 +92,11 @@ class RegisteredUserController extends Controller
                 'message' => $e->getMessage(),
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        // event(new Registered($user));
+
+        // Auth::login($user);
+
+        // return redirect(RouteServiceProvider::HOME);
     }
 }
