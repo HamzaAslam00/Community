@@ -55,7 +55,6 @@ Route::middleware('auth')->group(function () {
     Route::get('activation-urls-dt', [ActivationUrlController::class, 'dataTable'])->name('activation-urls-datatable');
     // Route::get('registration-page-groups', [ActivationUrlController::class, 'registrationPageGroups'])->name('registration-page-groups');
     
-    
     //user routes
     Route::resource('users', UserController::class);
     Route::get('users-dt', [UserController::class, 'dataTable'])->name('users-datatable');

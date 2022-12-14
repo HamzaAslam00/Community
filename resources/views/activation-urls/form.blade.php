@@ -53,32 +53,32 @@
                     </div>
                 </div>
             </div>
-        </div>
-    @endif
-    {{-- <div class="row g-4">
-        <div class="col-lg-12">
-            <h5 class="card-title">Default Groups</h5>
-        </div>
-        <div class="align-self-end col-lg-12">
-            <div class="custom-control custom-control-md custom-checkbox custom-control">
-                <input type="checkbox" class="custom-control-input assign-all" id="assign_all" @if($isEdit && ($groups->count() == $activationUrl->groups->count())) checked @endif>
-                <label class="custom-control-label text-capitalize" for="assign_all">Assign all groups</label>
+        @endif
+        {{-- <div class="row g-4">
+            <div class="col-lg-12">
+                <h5 class="card-title">Default Groups</h5>
             </div>
-        </div>
-    </div>
-    <div class="row g-4 groups-section">
-        @foreach($groups as $group)
-            <div class="col-lg-2">
-                <div class="custom-control custom-control-md custom-checkbox custom-control pb-2">
-                    <input type="checkbox" class="custom-control-input" value="{{$group->id}}" id="group_{{$group->id }}" name="groups[]" @if($isEdit && in_array($group->id, $activationUrl->groups->pluck('id')->toArray())) checked @endif>
-                    <label class="custom-control-label text-capitalize" for="group_{{$group->id }}">{{ $group->name}}</label>
+            <div class="align-self-end col-lg-12">
+                <div class="custom-control custom-control-md custom-checkbox custom-control">
+                    <input type="checkbox" class="custom-control-input assign-all" id="assign_all" @if($isEdit && ($groups->count() == $activationUrl->groups->count())) checked @endif>
+                    <label class="custom-control-label text-capitalize" for="assign_all">Assign all groups</label>
                 </div>
             </div>
-        @endforeach
-    </div> --}}
-    <div class="row col-lg-12">
-        <div class="form-group">
-            <button type="submit" class="btn btn-md btn-primary" data-button="submit">Save</button>
+        </div>
+        <div class="row g-4 groups-section">
+            @foreach($groups as $group)
+                <div class="col-lg-2">
+                    <div class="custom-control custom-control-md custom-checkbox custom-control pb-2">
+                        <input type="checkbox" class="custom-control-input" value="{{$group->id}}" id="group_{{$group->id }}" name="groups[]" @if($isEdit && in_array($group->id, $activationUrl->groups->pluck('id')->toArray())) checked @endif>
+                        <label class="custom-control-label text-capitalize" for="group_{{$group->id }}">{{ $group->name}}</label>
+                    </div>
+                </div>
+            @endforeach
+        </div> --}}
+        <div class="row col-lg-12">
+            <div class="form-group">
+                <button type="submit" class="btn btn-md btn-primary" data-button="submit">Save</button>
+            </div>
         </div>
     </div>
 </form>

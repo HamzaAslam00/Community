@@ -25,7 +25,7 @@
                         <label class="form-label" for="first_name">First Name</label>
                     </div>
                     <div class="form-control-wrap">
-                        <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" placeholder="Enter your first name address">
+                        <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" placeholder="Enter your first name" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -33,7 +33,7 @@
                         <label class="form-label" for="last_name">Last Name</label>
                     </div>
                     <div class="form-control-wrap">
-                        <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" placeholder="Enter your last name address">
+                        <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" placeholder="Enter your last name">
                     </div>
                 </div>
                 <div class="form-group">
@@ -41,7 +41,7 @@
                         <label class="form-label" for="email">Email</label>
                     </div>
                     <div class="form-control-wrap">
-                        <input type="text" class="form-control form-control-lg" id="email" name="email" placeholder="Enter your email address">
+                        <input type="text" class="form-control form-control-lg" id="email" name="email" placeholder="Enter your email address" required>
                     </div>
                 </div>
                 <div class="form-group">

@@ -17,7 +17,11 @@ Route::middleware('guest')->group(function () {
                 ->name('register');
 
     //peyment routes
-    Route::post('register/{slug}/card-details', [PaymentController::class, 'cardDetails'])->name('card-details');
+    Route::group( [ 'prefix' => 'register/{slug}/' ], function()
+    {
+        Route::post('card-details', [PaymentController::class, 'cardDetails'])->name('card-details');
+        Route::post('process-payment', [PaymentController::class, 'processPayment'])->name('process-payment');
+    });
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 

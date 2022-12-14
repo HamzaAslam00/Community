@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title', '| Activation Urls')
+@section('content')
 
 @php
     $isEdit = isset($activationUrl) ? true : false;
     $url = $isEdit ? route('activation-urls.update', $activationUrl) : route('activation-urls.store');
 @endphp
 
-@section('content')
     <div class="nk-block nk-block-lg">
         <div class="nk-block-head">
             <div class="nk-block-between">
