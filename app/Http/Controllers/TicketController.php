@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use App\Models\RegistrationPage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -17,10 +18,9 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($registrationPageId)
     {
-        $ticketsCount = Ticket::get()->count();
-        return view('tickets.index', compact('ticketsCount'));
+        //
     }
 
     /**
@@ -28,9 +28,9 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($registrationPageId)
     {
-        return view('tickets.modal');
+        return view('tickets.modal', compact('registrationPageId'));
     }
 
     /**
@@ -39,10 +39,11 @@ class TicketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $registrationPageId)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|unique:tickets,amount',
+            'title' => 'required',
+            'amount' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -54,7 +55,10 @@ class TicketController extends Controller
         try{
             DB::beginTransaction();
             $ticket = Ticket::create([
+                'registration_page_id' => $registrationPageId,
+                'title' => $request->title,
                 'amount' => $request->amount,
+                'description' => $request->description,
                 'status' => $request->status,
             ]);
             DB::commit();
@@ -89,9 +93,9 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ticket $ticket)
+    public function edit($registrationPageId, Ticket $ticket)
     {
-        return view('tickets.modal', compact('ticket'));
+        return view('tickets.modal', compact('ticket', 'registrationPageId'));
     }
 
     /**
@@ -101,10 +105,11 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ticket $ticket)
+    public function update(Request $request, $registrationPageId, Ticket $ticket)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|unique:tickets,amount,'.$ticket->id.',id',
+            'title' => 'required',
+            'amount' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -116,7 +121,9 @@ class TicketController extends Controller
         try{
             DB::beginTransaction();
             $ticket->update([
+                'title' => $request->title,
                 'amount' => $request->amount,
+                'description' => $request->description,
                 'status' => $request->status,
             ]);
             DB::commit();
@@ -140,7 +147,7 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ticket $ticket)
+    public function destroy($registrationPageId, Ticket $ticket)
     {
         try 
         {
@@ -158,37 +165,40 @@ class TicketController extends Controller
         }
     }
     
-    public function dataTable () {
-        $tickets = Ticket::orderBy('id', 'DESC')->get();
+    public function dataTable ($registrationPageId) {
+        $tickets = RegistrationPage::findOrFail($registrationPageId)->tickets;
         return Datatables::of($tickets)
-            ->addColumn('actions', function ($record) {
+            ->addColumn('actions', function ($record) use($registrationPageId) {
                 $actions = '';
                     $actions =  '<div class="drodown">
                                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('tickets.edit', $record). '" data-title="Edit Ticket" data-toggle="tooltip" data-placement="top" title="Edit Ticket">
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('registration-pages.tickets.edit', [$registrationPageId, $record]). '" data-title="Edit Ticket" data-toggle="tooltip" data-placement="top" title="Edit Ticket">
                                             <em class="icon ni ni-edit"></em><span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="tickets_table" data-method="get" data-url="' .route('tickets.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Ticket">
+                                        <a class="delete" href="javascript:void(0)" data-table="tickets_table" data-method="get" data-url="' .route('registration-pages.tickets.destroy', [$registrationPageId, $record]). '" data-toggle="tooltip" data-placement="top" title="Delete Ticket">
                                             <em class="icon ni ni-trash"></em><span>Delete</span>
                                         </a>
                                     </li>
                                 </ul></div></div>';
                 return $actions;
             })
-            ->addColumn('amount', function ($record) {
+            ->addColumn('title', function ($record) use($registrationPageId) {
                 return '<a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('tickets.edit', $record). '" data-title="Edit Ticket"
-                                data-toggle="tooltip" data-placement="top" title="Edit Ticket">'.$record->amount.'$</a>';
+                                data-action-url="'. route('registration-pages.tickets.edit', [$registrationPageId, $record]). '" data-title="Edit Ticket"
+                                data-toggle="tooltip" data-placement="top" title="Edit Ticket">'.$record->title.'</a>';
+            })
+            ->addColumn('amount', function ($record) use($registrationPageId) {
+                return '$'.$record->amount;
             })
             ->addColumn('status', function ($record) {
                 return '<span class="badge badge-'.statusClasses($record->status).'">'. ucfirst($record->status) .'</span>';
             })
-            ->rawColumns(['amount', 'status', 'actions'])
+            ->rawColumns(['title', 'amount', 'status', 'actions'])
             ->addIndexColumn()->make(true);
     }
 }

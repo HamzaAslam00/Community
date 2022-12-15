@@ -19,4 +19,9 @@ class RegistrationPage extends Model
     {
         return $this->belongsToMany(Group::class, 'group_registration_page');
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

@@ -18,19 +18,19 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="description">Description</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="description" name="description" required value="{{ $isEdit ? $group->description : '' }}">
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="form-group">
                 <label class="form-label" for="status">Status</label>
                 <select class="form-control form-select" id="status" name="status" required>
                     <option value="active" @if($isEdit && $group->status == 'active') selected @endif>Active</option>
                     <option value="inactive" @if($isEdit && $group->status == 'inactive') selected @endif>In-Active</option>
                 </select>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="form-label" for="description">Description</label>
+                <div class="form-control-wrap">
+                    <textarea type="text" class="form-control" id="description" name="description" required>{{ $isEdit ? $group->description : '' }}</textarea>
+                </div>
             </div>
         </div>
         <div class="col-12">

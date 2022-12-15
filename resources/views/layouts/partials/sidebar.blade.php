@@ -41,18 +41,6 @@
                             <span class="nk-menu-text">Registration Pages</span>
                         </a>
                     </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('tickets.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-ticket"></em></span>
-                            <span class="nk-menu-text">Tickets</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('activation-urls.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-link-alt"></em></span>
-                            <span class="nk-menu-text">Activation Urls</span>
-                        </a>
-                    </li>
                     @can('view_users')
                         <li class="nk-menu-heading">
                             <h6 class="overline-title text-primary-alt">Security</h6>

@@ -10,6 +10,9 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
+        'registration_page_id',
+        'title',
+        'description',
         'amount',
         'status',
     ];

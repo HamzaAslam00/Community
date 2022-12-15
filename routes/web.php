@@ -45,11 +45,14 @@ Route::middleware('auth')->group(function () {
     //registration-pages routes
     Route::resource('registration-pages', RegistrationPageController::class);
     Route::get('registration-pages-dt', [RegistrationPageController::class, 'dataTable'])->name('registration-pages-datatable');
-    
-    //ticket routes
-    Route::resource('tickets', TicketController::class);
-    Route::get('tickets-dt', [TicketController::class, 'dataTable'])->name('tickets-datatable');
 
+    Route::group(['prefix' => 'registration-pages/{registrationPageId}/', 'as' => 'registration-pages.'], function()
+    {
+        //ticket routes
+        Route::resource('tickets', TicketController::class);
+        Route::get('tickets-dt', [TicketController::class, 'dataTable'])->name('tickets-datatable');
+    });
+    
     //activation-urls routes
     Route::resource('activation-urls', ActivationUrlController::class);
     Route::get('activation-urls-dt', [ActivationUrlController::class, 'dataTable'])->name('activation-urls-datatable');

@@ -12,7 +12,7 @@
             <div class="form-group">
                 <label class="form-label" for="title">Title</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="title" name="title" required value="{{ $isEdit ? $registrationPage->title : '' }}">
+                    <input type="text" class="form-control" id="title" name="title" required value="{{ $isEdit ? $registrationPage->title : '' }}" onfocusout="convertToSlug(this.value)">
                 </div>
             </div>
         </div>
@@ -27,13 +27,6 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="default_groups">Default Groups</label>
-                {{-- <div class="form-control-wrap">
-                    <select class="form-select" id="default_groups" name="default_groups[]" data-search="on" multiple="multiple" data-placeholder="Select Groups">
-                        @foreach ($groups as $group)
-                            <option value="{{ $group->id }}" @if($isEdit && in_array($group->id, $selected_groups)) selected @endif>{{ $group->name }}</option>
-                        @endforeach
-                    </select>
-                </div> --}}
                 <select class="form-control form-select form-select-modal" id="default_groups" name="default_groups[]" multiple>
                     @foreach ($groups as $group)
                         <option value="{{ $group->id }}" @if($isEdit && in_array($group->id, $selected_groups)) selected @endif>{{ $group->name }}</option>
@@ -60,4 +53,9 @@
 
 <script>
     $('.form-select-modal').select2();
+
+    function convertToSlug(Text) {
+        let slug = Text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+        $('#slug').val(slug);
+    };
 </script>

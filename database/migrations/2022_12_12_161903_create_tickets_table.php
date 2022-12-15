@@ -15,8 +15,12 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('registration_page_id');
+            $table->string('title');
+            $table->string('description')->nullable();
             $table->float('amount');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->foreign('registration_page_id')->references('id')->on('registration_pages')->onDelete('cascade');
             $table->timestamps();
         });
     }

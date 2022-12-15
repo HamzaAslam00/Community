@@ -51,6 +51,11 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            
+            jQuery.validator.addMethod("regex", function(value, element) {
+                return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+            }, "Only alphabetic name is allow");
         </script>
         <script src="{{ asset('assets/js/common.js') }}?v={{ time() }}"></script>
 

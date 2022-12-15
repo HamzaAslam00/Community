@@ -1,6 +1,6 @@
 @php
     $isEdit = isset($ticket) ? true : false;
-    $url = $isEdit ? route('tickets.update', $ticket->id) : route('tickets.store');
+    $url = $isEdit ? route('registration-pages.tickets.update', [$registrationPageId, $ticket->id]) : route('registration-pages.tickets.store', $registrationPageId);
 @endphp
 <form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post" data-modal="#ajax_model" data-datatable="#tickets_table">
     @csrf
@@ -10,9 +10,25 @@
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="form-group">
+                <label class="form-label" for="title">Title</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="title" name="title" required value="{{ $isEdit ? $ticket->title : '' }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
                 <label class="form-label" for="amount">Amount($)</label>
                 <div class="form-control-wrap">
                     <input type="number" min="0" step="0.01" class="form-control" id="amount" name="amount" required value="{{ $isEdit ? $ticket->amount : '' }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="form-label" for="description">Description</label>
+                <div class="form-control-wrap">
+                    <textarea type="text" class="form-control" id="description" name="description">{{ $isEdit ? $ticket->description : '' }}</textarea>
                 </div>
             </div>
         </div>

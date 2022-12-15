@@ -8,27 +8,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendUserCredencialsMail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
-    public function cardDetails(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'activation_url_id' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => $validator->errors()->first(),
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
-        $activationUrl = ActivationUrl::with('registrationPage', 'tickets', 'user')->findOrFail($request->activation_url_id);
-        $intent = $activationUrl->user->createSetupIntent();
-
-        return view('payments.card_details', compact('activationUrl', 'intent'));
-        
-    }
-
     public function processPayment(Request $request) {
         $activationUrl = ActivationUrl::with('registrationPage.groups', 'tickets', 'user')->findOrFail($request->activation_url_id);
         $user= $activationUrl->user;

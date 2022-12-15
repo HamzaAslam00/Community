@@ -85,9 +85,10 @@ class RegistrationPageController extends Controller
      * @param  \App\Models\RegistrationPage  $registrationPage
      * @return \Illuminate\Http\Response
      */
-    public function show(RegistrationPage $registrationPage)
+    public function show($id)
     {
-        //
+        $registrationPage = RegistrationPage::with('groups')->findOrFail($id);
+        return view('registration-pages.show', compact('registrationPage'));
     }
 
     /**
@@ -180,6 +181,11 @@ class RegistrationPageController extends Controller
                                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
+                                    <li>
+                                        <a class="dropdown-item" href="'. route('registration-pages.show', $record->id). '" data-toggle="tooltip" data-placement="top" title="View Page">
+                                            <em class="icon ni ni-eye"></em><span>View</span>
+                                        </a>
+                                    </li>
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('registration-pages.edit', $record). '" data-title="Edit Page" data-toggle="tooltip" data-placement="top" title="Edit Page">
                                             <em class="icon ni ni-edit"></em><span>Edit</span>
