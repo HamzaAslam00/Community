@@ -37,7 +37,7 @@
                             </a>
                         </li>
                     @endcan
-                    @can('registration_pages')
+                    @can('view_registration_pages')
                         <li class="nk-menu-item">
                             <a href="{{ route('registration-pages.index') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-note-add"></em></span>
