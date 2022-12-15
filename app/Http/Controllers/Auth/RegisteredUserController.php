@@ -27,10 +27,13 @@ class RegisteredUserController extends Controller
     public function create()
     {
         $slug = request()->route('slug');
-        $registrationPage = RegistrationPage::with('tickets', 'groups')->where('slug', $slug)->first();
-        if(!$registrationPage) {abort(404);}
-        if($registrationPage->status == 'inactive'){abort(403);}
-        return view('payments.payment_form', compact('registrationPage'));
+        if ($slug) {
+            $registrationPage = RegistrationPage::with('tickets', 'groups')->where('slug', $slug)->first();
+            if(!$registrationPage) {abort(404);}
+            if($registrationPage->status == 'inactive'){abort(403);}
+            return view('payments.payment_form', compact('registrationPage'));
+        }
+        return view('auth.register');
     }
 
     /**
@@ -44,11 +47,12 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'registration_page_id' => 'required',
+            'ticket_id' => 'required',
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'registration_page_id' => 'required',
-            'ticket_id' => 'required',
+            'card-holder-name' => 'required',
         ],[
             'ticket_id.required' => 'Please Select a ticket to proceed.',
         ]);
@@ -72,16 +76,26 @@ class RegisteredUserController extends Controller
                 ]);
                 $user->assignRole('user');
             }
+
+            $amount = Ticket::find($request->ticket_id)->amount;
+            $user->createOrGetStripeCustomer();
+            $user->updateDefaultPaymentMethod($request->payment_method);
+            $user->charge($amount * 100, $request->payment_method);
+
+            $user->update([
+                'status' => 'active',
+            ]);
+            
             $registrationPage = RegistrationPage::with('groups')->findOrFail($request->registration_page_id);
             $user->groups()->sync($registrationPage->groups()->pluck('id')->toArray());
-            Session::flush();
-            Session::put('user', $user);
-            Session::save();
-            $intent = $user->createSetupIntent();
+            
+            event(new Registered($user));
+            Auth::login($user);
+            $route =  redirect(RouteServiceProvider::HOME);
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
-                'message' => 'Intent Created',
-                'client_secret' => $intent->client_secret,
+                'message' => 'User created successfully',
+                'route' => $route,
             ], JsonResponse::HTTP_OK);
 
         } catch(Exception $e){
@@ -91,10 +105,5 @@ class RegisteredUserController extends Controller
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        // event(new Registered($user));
-
-        // Auth::login($user);
-
-        // return redirect(RouteServiceProvider::HOME);
     }
 }

@@ -27,14 +27,14 @@ class RolesTableSeeder extends Seeder
         $permissions = Permission::all();
         
         //Assign permissions to roles
-        $admin = Role::create([
+        $admin = Role::updateOrCreate([
             'name' => 'admin',
             'title' => 'Admin',
             'is_deleteable' => 0,
         ]);
         $admin->permissions()->sync($permissions);
 
-        $user = Role::create([
+        $user = Role::updateOrCreate([
             'name' => 'user',
             'title' => 'User'
         ]);

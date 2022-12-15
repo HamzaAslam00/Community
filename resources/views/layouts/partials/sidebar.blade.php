@@ -29,18 +29,22 @@
                             {{-- <span class="nk-menu-badge">HOT</span> --}}
                         </a>
                     </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('groups.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                            <span class="nk-menu-text">Groups</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('registration-pages.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-note-add"></em></span>
-                            <span class="nk-menu-text">Registration Pages</span>
-                        </a>
-                    </li>
+                    @can('view_groups')
+                        <li class="nk-menu-item">
+                            <a href="{{ route('groups.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                <span class="nk-menu-text">Groups</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('registration_pages')
+                        <li class="nk-menu-item">
+                            <a href="{{ route('registration-pages.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-note-add"></em></span>
+                                <span class="nk-menu-text">Registration Pages</span>
+                            </a>
+                        </li>
+                    @endcan
                     @can('view_users')
                         <li class="nk-menu-heading">
                             <h6 class="overline-title text-primary-alt">Security</h6>

@@ -15,11 +15,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 Route::middleware('guest')->group(function () {
     Route::get('register/{slug?}', [RegisteredUserController::class, 'create'])
                 ->name('register');
-
-    //peyment routes
-    Route::post('register/user-details', [PaymentController::class, 'userDetails'])->name('user-details');
-    Route::post('register/process-payment', [PaymentController::class, 'processPayment'])->name('process-payment');
-
+                
     Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])

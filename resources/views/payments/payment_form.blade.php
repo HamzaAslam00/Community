@@ -56,7 +56,7 @@
                     </div> --}}
                 </div>
             </div>
-            <form method="post" action="{{ route('register') }}" class="gy-3 form-validate is-alter">
+            <form method="post" action="{{ route('register') }}" class="gy-3 form-validate is-alter" id="subscribe-form">
                 @csrf
                 <input type="hidden" value="{{ $registrationPage->id }}" name="registration_page_id">
                 <input type="hidden" name="ticket_id" id="ticket_id">
@@ -89,7 +89,7 @@
                         <label class="form-label">Select a Ticket to proceed</label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row form-group">
                     @foreach ($registrationPage->tickets as $ticket)
                         <div class="col-md-6">
                             <div class="card ticket-card" data-ticket-id="{{ $ticket->id }}" style="cursor: pointer;">
@@ -102,34 +102,24 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="d-flex justify-content-center mt-2">
-                    <div class="spinner-border d-none" role="status">
-                        <span class="sr-only">Loading...</span>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <label class="form-label" for="card-holder-name">Card Holder Name</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg StripeElement" id="card-holder-name" name="card-holder-name" placeholder="Enter your name" required>
                     </div>
                 </div>
+                <div class="form-row">
+                    <label for="card-element">Credit or debit card</label>
+                    <div id="card-element" class="form-control"></div>
+                    <!-- Used to display form errors. -->
+                    <div id="card-errors" role="alert"></div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block pay" id="card-button" style="margin-top: 28px" >Submit</button>
+                </div>
             </form>
-            <div class="payment-form d-none">
-                <form action="{{route('process-payment')}}" method="POST" id="subscribe-form" class="mt-3">
-                    @csrf
-                    <div class="form-group">
-                        <div class="form-label-group">
-                            <label class="form-label" for="card-holder-name">Card Holder Name</label>
-                        </div>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control form-control-lg StripeElement" id="card-holder-name" name="card-holder-name" placeholder="Enter your name" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <label for="card-element">Credit or debit card</label>
-                        <div id="card-element" class="form-control"></div>
-                        <!-- Used to display form errors. -->
-                        <div id="card-errors" role="alert"></div>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-lg btn-primary btn-block pay" id="card-button" data-secret="" style="margin-top: 28px" >Submit</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 </div>
@@ -137,66 +127,14 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(function(){
-            sessionStorage.clear();
-        })
-        $('.ticket-card').on('click', function() {
-            let formIsValid = $('.form-validate').valid({
-                rules: {
-                    first_name: {
-                        required: true,
-                        regex: true
-                    },
-                    last_name: {
-                        required: true,
-                        regex: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                }
-            });
-            if(formIsValid) {
-                $(this).addClass('selected-card').parent().siblings().children().removeClass('selected-card');
-                $('#ticket_id').val($(this).data('ticket-id'));
-                $('.payment-form').addClass('d-none');
-                var form = $('.form-validate');
-                $('.spinner-border').removeClass('d-none');
-                window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-                window.axios({
-                    url: form.attr('action'),
-                    method: form.attr('method'),
-                    data: new FormData(form[0]),
-                })
-                .then(response => {
-                    if (response.status == 200) {
-                        $('#card-button').attr('data-secret', response.client_secret);
-                        $('.spinner-border').addClass('d-none');
-                        $('.payment-form').removeClass('d-none');
-                    }
-                    else {
-                        window.toast.fire({
-                            title: response.data.message,
-                            icon: 'error',
-                        });
-                    };
-                })
-                .catch(error => {
-                    window.toast.fire({
-                        title: error.response.data.message,
-                        icon: 'error',
-                    });
-                })
-                .finally(response => {
-                    $('.spinner-border').addClass('d-none');
-                })
-            }
-        });
-    </script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
+
+        $('.ticket-card').on('click', function() {
+            $(this).addClass('selected-card').parent().siblings().children().removeClass('selected-card');
+            $('#ticket_id').val($(this).data('ticket-id'));
+        });
+
         var stripe = Stripe('{{ config('services.stripe.key') }}');
             var elements = stripe.elements();
             var style = {
@@ -214,67 +152,69 @@
                     iconColor: '#fa755a'
                 }
             };
-            var card = elements.create('card', {hidePostalCode: true,
-                style: style});
+            var card = elements.create('card', {hidePostalCode: true, style: style});
             card.mount('#card-element');
             card.addEventListener('change', function(event) {
-                var displayError = document.getElementById('card-errors');
+                var displayError = $('#card-errors');
                 if (event.error) {
                     displayError.textContent = event.error.message;
                 } else {
                     displayError.textContent = '';
                 }
             });
-            const cardHolderName = document.getElementById('card-holder-name');
-            const cardButton = document.getElementById('card-button');
-            const clientSecret = cardButton.dataset.secret;
-            cardButton.addEventListener('click', async (e) => {
-                e.preventDefault();
+            const cardHolderName = $('#card-holder-name');
+            const cardButton = $('#card-button');
+            cardButton.on('click', async (e) => {
                 console.log("attempting");
-                cardButton.setAttribute('disabled', true);
-                const { setupIntent, error } = await stripe.confirmCardSetup(
-                    clientSecret, {
-                        payment_method: {
-                            card: card,
+                cardButton.attr('disabled', true);
+                const { paymentMethod, error } = await stripe.createPaymentMethod(
+                        'card', card, {
                             billing_details: { name: cardHolderName.value }
                         }
-                    });
+                    );
                 if (error) {
-                    var errorElement = document.getElementById('card-errors');
+                    var errorElement = $('#card-errors');
                     errorElement.textContent = error.message;
-                    cardButton.removeAttribute('disabled');
+                    cardButton.prop('disabled', false);
                 } else {
-                    paymentMethodHandler(setupIntent.payment_method);
+                    paymentMethodHandler(paymentMethod.id);
                 }
             });
             function paymentMethodHandler(payment_method) {
-                const cardButton = document.getElementById('card-button');
-                var form = document.getElementById('subscribe-form');
-                var hiddenInput = document.createElement('input');
-                hiddenInput.setAttribute('type', 'hidden');
-                hiddenInput.setAttribute('name', 'payment_method');
-                hiddenInput.setAttribute('value', payment_method);
-                form.appendChild(hiddenInput);
+                $('.form-validate').valid({
+                    rules: {
+                        first_name: {
+                            required: true,
+                            regex: true
+                        },
+                        last_name: {
+                            required: true,
+                            regex: true
+                        },
+                        email: {
+                            required: true,
+                            email: true
+                        },
+                    }
+                });
+                const cardButton = $('#card-button');
+                var form = $('#subscribe-form');
+                $("<input>").attr({ name: "payment_method", type: "hidden", value: payment_method }).appendTo(form);
                 axios({
-                    url: form.getAttribute('action'),
-                    method: form.getAttribute('method'),
-                    data: new FormData(form),
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: new FormData(form[0]),
                 })
                 .then(response => {
                     if (response.status == 200) {
-                        window.toast.fire({
-                            title: response.data.message,
-                            icon: 'success',
-                        });
-                        cardButton.removeAttribute('disabled');
-                        // window.location.href = '{{  route("login")  }}';
+                        window.location.href = response.data.route
                     }
                     else {
                         window.toast.fire({
                             title: response.data.message,
                             icon: 'error',
                         });
-                        cardButton.removeAttribute('disabled');
+                        cardButton.prop('disabled', false);
                     };
                 })
                 .catch(error => {
@@ -282,7 +222,7 @@
                         title: error.response.data.message,
                         icon: 'error',
                     });
-                    cardButton.removeAttribute('disabled');
+                    cardButton.prop('disabled', false);
                 })
             }
     </script>
