@@ -172,28 +172,38 @@ class RegistrationPageController extends Controller
         }
     }
 
-    public function dataTable () {
+    public function dataTable()
+    {
         $registrationPages = RegistrationPage::orderBy('id', 'DESC')->get();
         return Datatables::of($registrationPages)
             ->addColumn('actions', function ($record) {
                 $actions = '';
                     $actions =  '<div class="drodown">
-                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown">
+                                        <em class="icon ni ni-more-h"></em>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="'. route('admin.registration-pages.show', $record->id). '" data-toggle="tooltip" data-placement="top" title="View Page">
+                                        <a class="dropdown-item" href="'. route('admin.registration-pages.show', $record->id). '" 
+                                        data-toggle="tooltip" data-placement="top" title="View Page">
                                             <em class="icon ni ni-eye"></em><span>View</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.registration-pages.edit', $record). '" data-title="Edit Page" data-toggle="tooltip" data-placement="top" title="Edit Page">
-                                            <em class="icon ni ni-edit"></em><span>Edit</span>
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" 
+                                        data-action-url="'. route('admin.registration-pages.edit', $record). '" data-title="Edit Page" 
+                                        data-toggle="tooltip" data-placement="top" title="Edit Page">
+                                            <em class="icon ni ni-edit"></em>
+                                            <span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="registration_pages_table" data-method="get" data-url="' .route('admin.registration-pages.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Page">
-                                            <em class="icon ni ni-trash"></em><span>Delete</span>
+                                        <a class="delete" href="javascript:void(0)" data-table="registration_pages_table" data-method="get" 
+                                        data-url="' .route('admin.registration-pages.destroy', $record). '" data-toggle="tooltip" 
+                                        data-placement="top" title="Delete Page">
+                                            <em class="icon ni ni-trash"></em>
+                                            <span>Delete</span>
                                         </a>
                                     </li>
                                 </ul></div></div>';

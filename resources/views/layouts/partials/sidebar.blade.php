@@ -71,10 +71,13 @@
                         </li>
                     @endcan
                     @user
+                        @php
+                            $userGroups = \Auth::user()->groups()->where('status', 'active')->get();
+                        @endphp
                         <li class="nk-menu-heading">
                             <h6 class="overline-title text-primary-alt">Groups</h6>
                         </li>
-                        @foreach (\Auth::user()->groups as $group)
+                        @foreach ($userGroups as $group)
                             <hr>
                             <li class="nk-menu-item group-menu-item">
                                 <div class="user-card nk-menu-item">
@@ -88,11 +91,11 @@
                             </li>
                         @endforeach
                         <hr>
-                        <li class="nk-menu-item">
-                            <button class="btn btn-lg btn-primary btn-block">Join Groups</button>
-                        </li>
-                        <div class="form-group">
-                        </div>
+                        @if (getGroupsToJoin(true))
+                            <li class="nk-menu-item">
+                                <a class="btn btn-md btn-primary btn-block" href="{{ route('join-groups') }}">Join Groups</a>
+                            </li>
+                        @endif
                     @enduser
                     {{-- <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">

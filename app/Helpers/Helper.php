@@ -1,8 +1,10 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Group;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 function getFullName($user)
 {
@@ -98,4 +100,11 @@ function statusClasses($status)
 function addEllipsis($text, $max = 30)
 {
     return strlen($text) > 30 ? mb_substr($text, 0, $max, "UTF-8") . "..." : $text;
+}
+
+function getGroupsToJoin($count = false)
+{
+    $userGroups = Auth::user()->groups()->pluck('id')->toArray();
+    $groups = Group::whereNotIn('id', $userGroups)->where('status', 'active')->get();
+    return $count ? count($groups) : $groups;
 }

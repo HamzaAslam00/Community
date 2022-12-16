@@ -190,24 +190,32 @@ class UserController extends Controller
         }
     }
 
-    public function dataTable ()
+    public function dataTable()
     {
         $users = User::where('id', '!=', '1')->get();
         return Datatables::of($users)
             ->addColumn('actions', function ($record) {
                 $actions = '';
                     $actions =  '<div class="drodown">
-                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown">
+                                        <em class="icon ni ni-more-h"></em>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                             <li>
-                                                <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.users.edit', $record->id). '" data-title="Edit User" data-toggle="tooltip" data-placement="top" title="Edit User">
-                                                    <em class="icon ni ni-edit"></em><span>Edit</span>
+                                                <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" 
+                                                    data-action-url="'. route('admin.users.edit', $record->id) .'" data-title="Edit User" 
+                                                    data-toggle="tooltip" data-placement="top" title="Edit User">
+                                                        <em class="icon ni ni-edit"></em>
+                                                        <span>Edit</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="delete" href="javascript:void(0)" data-table="users_table" data-method="get" data-url="' .route('admin.users.destroy', $record->id). '" data-toggle="tooltip" data-placement="top" title="Delete User">
-                                                    <em class="icon ni ni-trash"></em><span>Delete</span>
+                                                <a class="delete" href="javascript:void(0)" data-table="users_table" data-method="get" 
+                                                data-url="' .route('admin.users.destroy', $record->id) .'" data-toggle="tooltip" 
+                                                data-placement="top" title="Delete User">
+                                                    <em class="icon ni ni-trash"></em>
+                                                    <span>Delete</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -224,9 +232,11 @@ class UserController extends Controller
                             <img src='.$avatar.' alt="" style="height: inherit;">
                         </div>
                         <div class="user-info">
-                            <span class="tb-lead"><a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('admin.users.edit', $record->id). '" data-title="Edit User"
-                                data-toggle="tooltip" data-placement="top" title="Edit User">'.getFullName($record).'</a></span>
+                            <span class="tb-lead">
+                                <a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
+                                    data-action-url="'. route('admin.users.edit', $record->id) .'" data-title="Edit User"
+                                    data-toggle="tooltip" data-placement="top" title="Edit User">'.getFullName($record).'</a>
+                            </span>
                             <span>'.$record->email.'</span>
                         </div>
                     </div>';

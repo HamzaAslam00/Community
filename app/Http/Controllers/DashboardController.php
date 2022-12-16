@@ -83,7 +83,8 @@ class DashboardController extends Controller
         //
     }
 
-    public function redirectUser() {
+    public function redirectUser()
+    {
         if(Auth::user()->hasRole('admin')) {
             return redirect()->route('admin.dashboard.index');
         }

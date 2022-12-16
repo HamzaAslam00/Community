@@ -2,7 +2,8 @@
     $isEdit = isset($user) ? true : false;
     $url = $isEdit ? route('admin.users.update', $user->id) : route('admin.users.store');
 @endphp
-<form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post" data-modal="#ajax_model" data-datatable="#users_table" enctype="multipart/form-data">
+<form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post"
+    data-modal="#ajax_model" data-datatable="#users_table" enctype="multipart/form-data">
     @csrf
     @if($isEdit)
         @method('put')
@@ -17,8 +18,11 @@
             <div class="form-group">
                 <div class=" logo">
                     <label for="logo-input">
-                        <img id="logo" src="{{ $isEdit && isset($user->avatar) ? getImage($user->avatar) : asset('assets/images/no_avatar.png') }}" alt="user avatar" class="" style="max-width:100px;max-height:120px"/>
-                        <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file' onchange="readURL(this);" />
+                        <img id="logo"
+                            src="{{ $isEdit && isset($user->avatar) ? getImage($user->avatar) : asset('assets/images/no_avatar.png') }}"
+                            alt="user avatar" class="" style="max-width:100px;max-height:120px" />
+                        <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file'
+                            onchange="readURL(this);" />
                     </label>
                 </div>
             </div>
@@ -29,7 +33,8 @@
             <div class="form-group">
                 <label class="form-label" for="first_name">First Name</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="first_name" name="first_name" required value="{{ $isEdit ? $user->first_name : '' }}">
+                    <input type="text" class="form-control" id="first_name" name="first_name" required
+                        value="{{ $isEdit ? $user->first_name : '' }}">
                 </div>
             </div>
         </div>
@@ -37,7 +42,8 @@
             <div class="form-group">
                 <label class="form-label" for="last_name">Last Name</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="last_name" name="last_name" required value="{{ $isEdit ? $user->last_name : '' }}">
+                    <input type="text" class="form-control" id="last_name" name="last_name" required
+                        value="{{ $isEdit ? $user->last_name : '' }}">
                 </div>
             </div>
         </div>
@@ -45,7 +51,8 @@
             <div class="form-group">
                 <label class="form-label" for="email">Email</label>
                 <div class="form-control-wrap">
-                    <input type="email" class="form-control" id="email" name="email" required value="{{ $isEdit ? $user->email : '' }}">
+                    <input type="email" class="form-control" id="email" name="email" required
+                        value="{{ $isEdit ? $user->email : '' }}">
                 </div>
             </div>
         </div>
@@ -54,7 +61,8 @@
                 <label class="form-label" for="status">Status</label>
                 <select class="form-control form-select" id="status" name="status" required>
                     <option value="active" @if($isEdit && $user->status == 'active') selected @endif>Active</option>
-                    <option value="inactive" @if($isEdit && $user->status == 'inactive') selected @endif>In-Active</option>
+                    <option value="inactive" @if($isEdit && $user->status == 'inactive') selected @endif>In-Active
+                    </option>
                 </select>
             </div>
         </div>

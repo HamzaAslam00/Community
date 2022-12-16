@@ -165,23 +165,32 @@ class TicketController extends Controller
         }
     }
     
-    public function dataTable ($registrationPageId) {
+    public function dataTable($registrationPageId)
+    {
         $tickets = RegistrationPage::findOrFail($registrationPageId)->tickets;
         return Datatables::of($tickets)
             ->addColumn('actions', function ($record) use($registrationPageId) {
                 $actions = '';
                     $actions =  '<div class="drodown">
-                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown">
+                                        <em class="icon ni ni-more-h"></em>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.registration-pages.tickets.edit', [$registrationPageId, $record]). '" data-title="Edit Ticket" data-toggle="tooltip" data-placement="top" title="Edit Ticket">
-                                            <em class="icon ni ni-edit"></em><span>Edit</span>
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" 
+                                        data-action-url="'. route('admin.registration-pages.tickets.edit', [$registrationPageId, $record]) .'" 
+                                        data-title="Edit Ticket" data-toggle="tooltip" data-placement="top" title="Edit Ticket">
+                                            <em class="icon ni ni-edit"></em>
+                                            <span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="tickets_table" data-method="get" data-url="' .route('admin.registration-pages.tickets.destroy', [$registrationPageId, $record]). '" data-toggle="tooltip" data-placement="top" title="Delete Ticket">
-                                            <em class="icon ni ni-trash"></em><span>Delete</span>
+                                        <a class="delete" href="javascript:void(0)" data-table="tickets_table" data-method="get" 
+                                        data-url="' .route('admin.registration-pages.tickets.destroy', [$registrationPageId, $record]) .'" 
+                                        data-toggle="tooltip" data-placement="top" title="Delete Ticket">
+                                            <em class="icon ni ni-trash"></em>
+                                            <span>Delete</span>
                                         </a>
                                     </li>
                                 </ul></div></div>';
@@ -189,7 +198,7 @@ class TicketController extends Controller
             })
             ->addColumn('title', function ($record) use($registrationPageId) {
                 return '<a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('admin.registration-pages.tickets.edit', [$registrationPageId, $record]). '" data-title="Edit Ticket"
+                                data-action-url="'. route('admin.registration-pages.tickets.edit', [$registrationPageId, $record]) .'" data-title="Edit Ticket"
                                 data-toggle="tooltip" data-placement="top" title="Edit Ticket">'.$record->title.'</a>';
             })
             ->addColumn('amount', function ($record) use($registrationPageId) {

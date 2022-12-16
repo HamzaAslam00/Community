@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -175,23 +176,32 @@ class GroupController extends Controller
         }
     }
     
-    public function dataTable () {
+    public function dataTable ()
+    {
         $groups = Group::orderBy('id', 'DESC')->get();
         return Datatables::of($groups)
             ->addColumn('actions', function ($record) {
                 $actions = '';
                     $actions =  '<div class="drodown">
-                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown">
+                                        <em class="icon ni ni-more-h"></em>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.groups.edit', $record). '" data-title="Edit Group" data-toggle="tooltip" data-placement="top" title="Edit Group">
-                                            <em class="icon ni ni-edit"></em><span>Edit</span>
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" 
+                                        data-action-url="'. route('admin.groups.edit', $record). '" data-title="Edit Group" data-toggle="tooltip" 
+                                        data-placement="top" title="Edit Group">
+                                            <em class="icon ni ni-edit"></em>
+                                            <span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="groups_table" data-method="get" data-url="' .route('admin.groups.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Group">
-                                            <em class="icon ni ni-trash"></em><span>Delete</span>
+                                        <a class="delete" href="javascript:void(0)" data-table="groups_table" data-method="get" 
+                                        data-url="' .route('admin.groups.destroy', $record). '" data-toggle="tooltip" 
+                                        data-placement="top" title="Delete Group">
+                                            <em class="icon ni ni-trash"></em>
+                                            <span>Delete</span>
                                         </a>
                                     </li>
                                 </ul></div></div>';
@@ -206,9 +216,11 @@ class GroupController extends Controller
                             <img src='.$image.' alt="" style="height: inherit;">
                         </div>
                         <div class="user-info">
-                            <span class="tb-lead"><a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('admin.groups.edit', $record). '" data-title="Edit Group"
-                                data-toggle="tooltip" data-placement="top" title="Edit Group">'.$record->name.'</a></span>
+                            <span class="tb-lead">
+                                <a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
+                                    data-action-url="'. route('admin.groups.edit', $record). '" data-title="Edit Group"
+                                    data-toggle="tooltip" data-placement="top" title="Edit Group">'.$record->name.'</a>
+                            </span>
                             <span>'.$record->email.'</span>
                         </div>
                     </div>';
@@ -221,5 +233,11 @@ class GroupController extends Controller
             })
             ->rawColumns(['name', 'description', 'status', 'actions'])
             ->addIndexColumn()->make(true);
+    }
+
+    public function getGroups()
+    {
+        $groups = getGroupsToJoin();
+        return view('users.groups.index', compact('groups'));
     }
 }

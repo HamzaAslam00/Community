@@ -14,10 +14,17 @@
                 </div>
                 {{-- <div class="nk-block-head-content">
                     <div class="toggle-wrap nk-block-tools-toggle">
-                        <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                        <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu">
+                            <em class="icon ni ni-more-v"></em>
+                        </a>
                         <div class="toggle-expand-content" data-content="pageMenu">
                             <ul class="nk-block-tools g-3">
-                                <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary btn-sm" data-act="ajax-modal" data-method="get" data-action-url="{{ route('admin.users.create') }}" data-title="Add New User"><em class="icon ni ni-plus"></em><span>Add user</span></a></li>
+                                <li class="nk-block-tools-opt">
+                                    <a href="#" class="btn btn-primary btn-sm" data-act="ajax-modal" data-method="get" 
+                                    data-action-url="{{ route('admin.users.create') }}" data-title="Add New User">
+                                        <em class="icon ni ni-plus"></em><span>Add user</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>

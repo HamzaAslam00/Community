@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 
@@ -29,6 +30,9 @@ Route::middleware('auth')->group(function () {
     //profile routes
     Route::resource('profile', ProfileController::class);
     Route::put('profile/passwordsave/{profile}', [ProfileController::class,'savePassword'])->name('profile.save_password');
+
+    //group routes
+    Route::get('join-groups', [GroupController::class, 'getGroups'])->name('join-groups');
 
 });
 
