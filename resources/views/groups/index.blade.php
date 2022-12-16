@@ -17,7 +17,7 @@
                         <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                         <div class="toggle-expand-content" data-content="pageMenu">
                             <ul class="nk-block-tools g-3">
-                                <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary btn-sm" data-act="ajax-modal" data-method="get" data-action-url="{{ route('groups.create') }}" data-title="Add New Group"><em class="icon ni ni-plus"></em><span>Add Group</span></a></li>
+                                <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary btn-sm" data-act="ajax-modal" data-method="get" data-action-url="{{ route('admin.groups.create') }}" data-title="Add New Group"><em class="icon ni ni-plus"></em><span>Add Group</span></a></li>
                             </ul>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                 responsive: {
                     details: true
                 },
-                ajax: '{{ route('groups-datatable') }}',
+                ajax: '{{ route('admin.groups-datatable') }}',
                 processing: true,
                 serverSide: true,
                 scrollX: false,

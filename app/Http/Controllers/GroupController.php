@@ -54,11 +54,18 @@ class GroupController extends Controller
         
         try{
             DB::beginTransaction();
+            $path = saveResizeImage($request->group_image, 'group/images', 1024, 'jpg');
             $group = Group::create([
                 'name' => $request->name,
                 'description' => $request->description,
                 'status' => $request->status,
             ]);
+            if($request->has('group_image')){
+                $path = saveResizeImage($request->group_image, 'group/images', 1024, 'jpg');
+                $group->update([
+                    'image' => $path
+                ]);
+            }
             DB::commit();
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
@@ -123,6 +130,12 @@ class GroupController extends Controller
                 'description' => $request->description,
                 'status' => $request->status,
             ]);
+            if($request->has('group_image')){
+                $path = saveResizeImage($request->group_image, 'group/images', 1024, 'jpg');
+                $group->update([
+                    'image' => $path
+                ]);
+            }
             DB::commit();
             return response()->json([
                 'success' => JsonResponse::HTTP_OK,
@@ -172,12 +185,12 @@ class GroupController extends Controller
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('groups.edit', $record). '" data-title="Edit Group" data-toggle="tooltip" data-placement="top" title="Edit Group">
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.groups.edit', $record). '" data-title="Edit Group" data-toggle="tooltip" data-placement="top" title="Edit Group">
                                             <em class="icon ni ni-edit"></em><span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="groups_table" data-method="get" data-url="' .route('groups.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Group">
+                                        <a class="delete" href="javascript:void(0)" data-table="groups_table" data-method="get" data-url="' .route('admin.groups.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Group">
                                             <em class="icon ni ni-trash"></em><span>Delete</span>
                                         </a>
                                     </li>
@@ -185,9 +198,20 @@ class GroupController extends Controller
                 return $actions;
             })
             ->addColumn('name', function ($record) {
-                return '<a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('groups.edit', $record). '" data-title="Edit Group"
-                                data-toggle="tooltip" data-placement="top" title="Edit Group">'.$record->name.'</a>';
+                
+                $image = isset($record->image) ? getImage($record->image) : url("assets/images/no_image.png");
+                return '
+                    <div class="user-card">
+                        <div class="user-avatar">
+                            <img src='.$image.' alt="" style="height: inherit;">
+                        </div>
+                        <div class="user-info">
+                            <span class="tb-lead"><a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
+                                data-action-url="'. route('admin.groups.edit', $record). '" data-title="Edit Group"
+                                data-toggle="tooltip" data-placement="top" title="Edit Group">'.$record->name.'</a></span>
+                            <span>'.$record->email.'</span>
+                        </div>
+                    </div>';
             })
             ->addColumn('description', function ($record) {
                 return addEllipsis($record->description);

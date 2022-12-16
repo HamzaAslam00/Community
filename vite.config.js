@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
-    server: {
-        host: 'localhost',
-    },
+    // server: {
+    //     host: 'localhost',
+    // },
     plugins: [
         // add css and js file
         laravel({

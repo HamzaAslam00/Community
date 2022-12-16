@@ -182,17 +182,17 @@ class RegistrationPageController extends Controller
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="dropdown-item" href="'. route('registration-pages.show', $record->id). '" data-toggle="tooltip" data-placement="top" title="View Page">
+                                        <a class="dropdown-item" href="'. route('admin.registration-pages.show', $record->id). '" data-toggle="tooltip" data-placement="top" title="View Page">
                                             <em class="icon ni ni-eye"></em><span>View</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('registration-pages.edit', $record). '" data-title="Edit Page" data-toggle="tooltip" data-placement="top" title="Edit Page">
+                                        <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.registration-pages.edit', $record). '" data-title="Edit Page" data-toggle="tooltip" data-placement="top" title="Edit Page">
                                             <em class="icon ni ni-edit"></em><span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="delete" href="javascript:void(0)" data-table="registration_pages_table" data-method="get" data-url="' .route('registration-pages.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Page">
+                                        <a class="delete" href="javascript:void(0)" data-table="registration_pages_table" data-method="get" data-url="' .route('admin.registration-pages.destroy', $record). '" data-toggle="tooltip" data-placement="top" title="Delete Page">
                                             <em class="icon ni ni-trash"></em><span>Delete</span>
                                         </a>
                                     </li>
@@ -201,7 +201,7 @@ class RegistrationPageController extends Controller
             })
             ->addColumn('title', function ($record) {
                 return '<a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('registration-pages.edit', $record). '" data-title="Edit Page"
+                                data-action-url="'. route('admin.registration-pages.edit', $record). '" data-title="Edit Page"
                                 data-toggle="tooltip" data-placement="top" title="Edit Page">'.$record->title.'</a>';
             })
             ->addColumn('slug', function ($record) {

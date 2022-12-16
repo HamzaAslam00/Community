@@ -22,6 +22,10 @@ class PermissionsTableSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         $permissions = [
+
+            //dashboard
+            ['group' => 'dashboard', 'name' => 'view_dashboard', 'title' => 'View dashboard', 'guard_name' => 'web'],
+
             // groups
             ['group' => 'groups', 'name' => 'view_groups', 'title' => 'View groups', 'guard_name' => 'web'],
             ['group' => 'groups', 'name' => 'add_group', 'title' => 'Add group', 'guard_name' => 'web'],

@@ -1,6 +1,6 @@
 @php
     $isEdit = isset($user) ? true : false;
-    $url = $isEdit ? route('users.update', $user->id) : route('users.store');
+    $url = $isEdit ? route('admin.users.update', $user->id) : route('admin.users.store');
 @endphp
 <form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post" data-modal="#ajax_model" data-datatable="#users_table" enctype="multipart/form-data">
     @csrf
@@ -10,14 +10,14 @@
     <div class="row g-3 align-center">
         <div class="col-lg-4">
             <div class="form-group">
-                <label class="form-label" for="dashboard_title">Avatar</label>
+                <label class="form-label" for="logo-input">Avatar</label>
             </div>
         </div>
         <div class="col-lg-8">
             <div class="form-group">
                 <div class=" logo">
                     <label for="logo-input">
-                        <img id="logo" src="{{ $isEdit && isset($user->avatar) ? getImage($user->avatar) : asset('assets/images/no_avatar.png') }}" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                        <img id="logo" src="{{ $isEdit && isset($user->avatar) ? getImage($user->avatar) : asset('assets/images/no_avatar.png') }}" alt="user avatar" class="" style="max-width:100px;max-height:120px"/>
                         <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file' onchange="readURL(this);" />
                     </label>
                 </div>

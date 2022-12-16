@@ -201,12 +201,12 @@ class UserController extends Controller
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                             <li>
-                                                <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('users.edit', $record->id). '" data-title="Edit User" data-toggle="tooltip" data-placement="top" title="Edit User">
+                                                <a class="dropdown-item" href="javascript:void(0)" data-act="ajax-modal" data-method="get" data-action-url="'. route('admin.users.edit', $record->id). '" data-title="Edit User" data-toggle="tooltip" data-placement="top" title="Edit User">
                                                     <em class="icon ni ni-edit"></em><span>Edit</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="delete" href="javascript:void(0)" data-table="users_table" data-method="get" data-url="' .route('users.destroy', $record->id). '" data-toggle="tooltip" data-placement="top" title="Delete User">
+                                                <a class="delete" href="javascript:void(0)" data-table="users_table" data-method="get" data-url="' .route('admin.users.destroy', $record->id). '" data-toggle="tooltip" data-placement="top" title="Delete User">
                                                     <em class="icon ni ni-trash"></em><span>Delete</span>
                                                 </a>
                                             </li>
@@ -225,7 +225,7 @@ class UserController extends Controller
                         </div>
                         <div class="user-info">
                             <span class="tb-lead"><a href="javascript:void(0)" class="link" data-act="ajax-modal" data-method="get"
-                                data-action-url="'. route('users.edit', $record->id). '" data-title="Edit User"
+                                data-action-url="'. route('admin.users.edit', $record->id). '" data-title="Edit User"
                                 data-toggle="tooltip" data-placement="top" title="Edit User">'.getFullName($record).'</a></span>
                             <span>'.$record->email.'</span>
                         </div>

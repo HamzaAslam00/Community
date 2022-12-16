@@ -1,12 +1,29 @@
 @php
     $isEdit = isset($group) ? true : false;
-    $url = $isEdit ? route('groups.update', $group->id) : route('groups.store');
+    $url = $isEdit ? route('admin.groups.update', $group->id) : route('admin.groups.store');
 @endphp
-<form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post" data-modal="#ajax_model" data-datatable="#groups_table">
+<form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post" data-modal="#ajax_model" data-datatable="#groups_table" enctype="multipart/form-data">
     @csrf
     @if($isEdit)
         @method('put')
     @endif
+    <div class="row g-3 align-center">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label class="form-label" for="group_image">Group Image</label>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="form-group">
+                <div class="logo">
+                    <label for="logo-input">
+                        <img id="logo" src="{{ $isEdit && isset($group->image) ? getImage($group->image) : asset('assets/images/no_image.png') }}" alt="group icon" style="max-width:100px;max-height:120px"/>
+                        <input id="logo-input" preview="#logo" name="group_image" class="d-none" type='file' onchange="readURL(this);" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="form-group">
@@ -40,3 +57,16 @@
         </div>
     </div>
 </form>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var preview = $(input).attr('preview');
+                $(preview).attr('src', e.target.result).css('max-width',150).css('max-height',120);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

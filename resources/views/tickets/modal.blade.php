@@ -1,6 +1,6 @@
 @php
     $isEdit = isset($ticket) ? true : false;
-    $url = $isEdit ? route('registration-pages.tickets.update', [$registrationPageId, $ticket->id]) : route('registration-pages.tickets.store', $registrationPageId);
+    $url = $isEdit ? route('admin.registration-pages.tickets.update', [$registrationPageId, $ticket->id]) : route('admin.registration-pages.tickets.store', $registrationPageId);
 @endphp
 <form action="{{ $url }}" class="gy-3 form-settings form-validate is-alter" data-form="ajax-form" method="post" data-modal="#ajax_model" data-datatable="#tickets_table">
     @csrf
